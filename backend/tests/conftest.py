@@ -14,8 +14,12 @@ from app.models import Dispense, DispenseAttempt, FormularyRule, IdempotencyReco
 
 
 @pytest.fixture(autouse=True)
-def clean_database():
+def clean_database(request):
     """Start every test from an empty schema while keeping migrations intact."""
+    if request.node.get_closest_marker("no_db"):
+        yield
+        return
+
     with SessionLocal.begin() as session:
         for table in (DispenseAttempt, Dispense, IdempotencyRecord, FormularyRule, Medicine):
             session.execute(delete(table))

@@ -23,4 +23,7 @@ dev = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
+markers = [
+  "no_db: test does not need the PostgreSQL cleanup fixture"
+]
 

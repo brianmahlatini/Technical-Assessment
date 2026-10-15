@@ -4,10 +4,11 @@ All persisted timestamps are UTC-aware, while rolling-window calculations are
 intentionally evaluated in Africa/Johannesburg as required by the brief.
 """
 
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
 JOHANNESBURG = ZoneInfo("Africa/Johannesburg")
+UTC = timezone.utc
 
 
 def to_utc(value: datetime) -> datetime:
