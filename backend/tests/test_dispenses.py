@@ -46,7 +46,9 @@ def test_rejection_reports_every_failed_rule_and_only_logs_attempt():
     }
     with SessionLocal() as session:
         assert session.scalar(select(Dispense).where(Dispense.idempotency_key == "reject-1")) is None
-        assert session.scalar(select(DispenseAttempt).where(DispenseAttempt.idempotency_key == "reject-1")).accepted is False
+        attempt = session.scalar(select(DispenseAttempt).where(DispenseAttempt.idempotency_key == "reject-1"))
+        assert attempt is not None
+        assert attempt.accepted is False
 
 
 def test_idempotency_replays_original_outcome_and_rejects_changed_payload():

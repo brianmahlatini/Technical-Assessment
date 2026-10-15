@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from decimal import Decimal
-from typing import Any
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -20,7 +20,7 @@ class ApiErrorItem(BaseModel):
     field: str
     code: str
     message: str
-    meta: dict[str, Any] = Field(default_factory=dict)
+    meta: Dict[str, Any] = Field(default_factory=dict)
 
 
 class ApiErrorResponse(BaseModel):
@@ -28,7 +28,7 @@ class ApiErrorResponse(BaseModel):
 
     error: str
     message: str
-    details: list[ApiErrorItem] = Field(default_factory=list)
+    details: List[ApiErrorItem] = Field(default_factory=list)
 
 
 class PageMeta(BaseModel):
@@ -59,7 +59,7 @@ class RuleOut(BaseModel):
 
     id: int
     effective_from: datetime
-    effective_to: datetime | None
+    effective_to: Optional[datetime]
     max_quantity_per_dispense: int
     max_quantity_per_30_days: int
     requires_authorisation: bool
@@ -69,7 +69,7 @@ class RuleOut(BaseModel):
 class MedicineListResponse(BaseModel):
     """Paginated medicine search response."""
 
-    data: list[MedicineOut]
+    data: List[MedicineOut]
     meta: PageMeta
 
 
@@ -77,7 +77,7 @@ class MedicineDetailResponse(BaseModel):
     """Medicine detail response including the rule in force now if one exists."""
 
     medicine: MedicineOut
-    current_rule: RuleOut | None
+    current_rule: Optional[RuleOut]
 
 
 class RuleCreate(BaseModel):
@@ -96,7 +96,7 @@ class DispenseCreate(BaseModel):
     patient_ref: str = Field(min_length=1, max_length=128)
     quantity: int = Field(gt=0)
     dispensed_at: datetime
-    authorisation_ref: str | None = None
+    authorisation_ref: Optional[str] = None
     idempotency_key: str = Field(min_length=1, max_length=128)
 
 
@@ -109,13 +109,13 @@ class DispenseOut(BaseModel):
     patient_ref: str
     quantity: int
     dispensed_at: datetime
-    authorisation_ref: str | None
+    authorisation_ref: Optional[str]
     idempotency_key: str
 
 
 class DispenseListResponse(BaseModel):
     """Paginated dispense ledger response."""
 
-    data: list[DispenseOut]
+    data: List[DispenseOut]
     meta: PageMeta
 

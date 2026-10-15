@@ -4,5 +4,12 @@
     "${workspaceFolder}\\backend\\src"
   ],
   "python.analysis.diagnosticMode": "workspace",
-  "python.analysis.typeCheckingMode": "basic"
+  "python.analysis.typeCheckingMode": "basic",
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/*.egg-info": true,
+    "frontend/node_modules": true,
+    "frontend/dist": true,
+    "frontend/.angular": true
+  }
 }
