@@ -20,7 +20,7 @@ services:
     build:
       context: ./backend
     environment:
-      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://emguidance:emguidance@db:5432/emguidance}
+      DATABASE_URL: postgresql+psycopg://emguidance:emguidance@db:5432/emguidance
       API_PREFIX: ${API_PREFIX:-/api/v1}
       FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-http://localhost:4200}
     depends_on:

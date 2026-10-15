@@ -1,0 +1,7 @@
+# Keep local dependencies and Angular build output out of the Docker build context.
+node_modules/
+dist/
+.angular/
+coverage/
+*.log
+
