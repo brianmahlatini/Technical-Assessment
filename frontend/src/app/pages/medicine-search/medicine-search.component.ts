@@ -1,3 +1,12 @@
+/*
+ * Medicine search page.
+ *
+ * Why this file exists:
+ *   This standalone component implements the catalogue view required by the
+ *   assessment. It owns search input, pagination state, and links into the
+ *   medicine detail route.
+ */
+
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -36,20 +45,31 @@ import { Medicine, PageMeta } from '../../core/api.models';
   `
 })
 export class MedicineSearchComponent {
+  // Keep API access behind the shared client so this page only manages view state.
   private readonly api = inject(ApiClient);
+
+  // Search term typed by the user. Empty string loads the default catalogue.
   q = '';
+
+  // Current page of medicines returned by the backend.
   medicines: Medicine[] = [];
+
+  // Pagination metadata mirrors the backend response and drives pager buttons.
   meta: PageMeta = { page: 1, page_size: 20, total: 0 };
 
   constructor() {
+    // Load the first page immediately so the user lands on useful seeded data.
     this.load(1);
   }
 
   load(page: number) {
+    // Guard against accidental calls before page one.
     if (page < 1) {
       return;
     }
 
+    // Replace local state only after the backend returns so the table and pager
+    // stay consistent with the same response.
     this.api.searchMedicines(this.q, page).subscribe((result) => {
       this.medicines = result.data;
       this.meta = result.meta;
@@ -57,6 +77,8 @@ export class MedicineSearchComponent {
   }
 
   totalPages() {
+    // Always show at least one page so the pager remains stable when there are
+    // no results.
     return Math.max(1, Math.ceil(this.meta.total / this.meta.page_size));
   }
 }

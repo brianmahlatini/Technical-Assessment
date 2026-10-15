@@ -1,9 +1,20 @@
+/*
+ * Shared API TypeScript models.
+ *
+ * Why this file exists:
+ *   These interfaces mirror the backend response/request shapes used by the
+ *   Angular components. Keeping them in one core file avoids each page inventing
+ *   its own partial copy of the API contract.
+ */
+
+// Pagination metadata appears on medicine search and ledger list responses.
 export interface PageMeta {
   page: number;
   page_size: number;
   total: number;
 }
 
+// Medicine rows power the search results and the detail page header.
 export interface Medicine {
   code: string;
   name: string;
@@ -13,6 +24,7 @@ export interface Medicine {
   is_active: boolean;
 }
 
+// Rule rows power the medicine detail timeline and current-rule display.
 export interface Rule {
   id: number;
   effective_from: string;
@@ -23,6 +35,7 @@ export interface Rule {
   version_label: string;
 }
 
+// Dispense rows are returned for accepted submissions and patient ledger items.
 export interface Dispense {
   id: number;
   medicine_code: string;
@@ -34,6 +47,7 @@ export interface Dispense {
   idempotency_key: string;
 }
 
+// Backend business validation details map directly to form-level messages.
 export interface ApiErrorDetail {
   field: string;
   code: string;
@@ -41,6 +55,7 @@ export interface ApiErrorDetail {
   meta?: Record<string, unknown>;
 }
 
+// The capture form sends this payload to POST /dispenses.
 export interface DispenseFormPayload {
   medicine_code: string;
   patient_ref: string;

@@ -1,3 +1,12 @@
+/*
+ * Medicine detail page.
+ *
+ * Why this file exists:
+ *   This component shows one medicine plus its current rule and full historical
+ *   rule timeline. It stays separate from search because it has different API
+ *   calls and page state.
+ */
+
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -25,19 +34,34 @@ import { Medicine, Rule } from '../../core/api.models';
   `
 })
 export class MedicineDetailComponent {
+  // Shared API client keeps HTTP details outside the component.
   private readonly api = inject(ApiClient);
+
+  // ActivatedRoute provides the medicine code from `/medicines/:code`.
   private readonly route = inject(ActivatedRoute);
 
+  // Header/details area for the selected medicine.
   medicine: Medicine | null = null;
+
+  // Current active rule, if one is in force at request time.
   currentRule: Rule | null = null;
+
+  // Complete historical timeline rendered underneath the header.
   rules: Rule[] = [];
 
   constructor() {
+    // The route is created only for detail URLs, but the empty fallback keeps
+    // the code defensive if routing changes later.
     const code = this.route.snapshot.paramMap.get('code') ?? '';
+
+    // Fetch summary/detail data independently from timeline data so each API
+    // contract remains small and focused.
     this.api.getMedicine(code).subscribe((result) => {
       this.medicine = result.medicine;
       this.currentRule = result.current_rule;
     });
+
+    // Load the full rule history for the timeline.
     this.api.getRules(code).subscribe((result) => {
       this.rules = result.data;
     });
