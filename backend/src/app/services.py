@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-from datetime import UTC, datetime
 from typing import Any
 
 from sqlalchemy import func, or_, select, text
@@ -113,6 +112,8 @@ def create_dispense_idempotently(session: Session, payload: DispenseCreate) -> t
 
         status_code, body = _evaluate_and_persist_dispense(session, payload, payload_hash)
         record = session.get(IdempotencyRecord, payload.idempotency_key)
+        if record is None:
+            raise RuntimeError("Idempotency record disappeared during dispense processing.")
         record.status_code = status_code
         record.response_body = body
         return status_code, body
@@ -138,6 +139,8 @@ def _evaluate_and_persist_dispense(session: Session, payload: DispenseCreate, pa
             reasons.append(ApiErrorItem(field="dispensed_at", code="no_rule_in_force", message="No formulary rule is in force at this time."))
 
     if rule is not None:
+        assert medicine is not None
+
         if payload.quantity > rule.max_quantity_per_dispense:
             reasons.append(
                 ApiErrorItem(
@@ -176,6 +179,8 @@ def _evaluate_and_persist_dispense(session: Session, payload: DispenseCreate, pa
     if reasons:
         session.add(_attempt(payload, payload_hash, medicine_id, False, reasons))
         return 422, _error_body("dispense_rejected", "Dispense rejected by formulary rules.", reasons)
+
+    assert medicine is not None
 
     dispense = Dispense(
         medicine_id=medicine.id,
