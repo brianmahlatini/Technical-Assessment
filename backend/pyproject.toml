@@ -23,7 +23,18 @@ dev = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
+addopts = ["-p", "no:cacheprovider"]
 markers = [
   "no_db: test does not need the PostgreSQL cleanup fixture"
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 140
+
+[tool.ruff.lint]
+extend-select = ["B", "I", "UP"]
+ignore = [
+  "B008"
 ]
 
