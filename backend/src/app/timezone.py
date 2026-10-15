@@ -1,11 +1,11 @@
-from datetime import datetime, timedelta, timezone
+import datetime as dt
 
 # Timezone utilities for pharmacy business rules.
 #
 # All persisted timestamps are UTC-aware, while rolling-window calculations are
 # intentionally evaluated in Africa/Johannesburg as required by the brief.
-JOHANNESBURG = timezone(timedelta(hours=2))
-UTC = timezone.utc
+JOHANNESBURG = dt.timezone(dt.timedelta(hours=2))
+UTC = dt.timezone.utc
 
 
 def to_utc(value):
@@ -18,6 +18,6 @@ def to_utc(value):
 def thirty_day_window_utc(end_utc):
     # Return the inclusive 30-day business window ending at end_utc.
     local_end = to_utc(end_utc).astimezone(JOHANNESBURG)
-    local_start = local_end - timedelta(days=30)
+    local_start = local_end - dt.timedelta(days=30)
     return local_start.astimezone(UTC), local_end.astimezone(UTC)
 
