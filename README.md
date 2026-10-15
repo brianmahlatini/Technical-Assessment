@@ -38,6 +38,17 @@ Useful seeded examples:
 - Medicine search: `MED-0001`
 - Patient ledger: `patient-0001`
 
+## Application Outputs
+
+The screenshots below were captured from the Dockerized application after running the seed command.
+
+| View | Output |
+| --- | --- |
+| Medicine search with paginated seeded catalogue | <img src="docs/screenshots/medicine-search.png" alt="Medicine search page showing seeded medicines" width="900"> |
+| Medicine detail with historical formulary rule timeline | <img src="docs/screenshots/rule-timeline.png" alt="Medicine detail page showing historical formulary rule timeline" width="900"> |
+| Dispense capture showing all validation failures returned together | <img src="docs/screenshots/dispense-validation.png" alt="Dispense capture page showing validation failures" width="900"> |
+| Patient ledger filtered by seeded patient reference | <img src="docs/screenshots/patient-ledger.png" alt="Patient ledger showing historical dispense output" width="900"> |
+
 ## Run Tests
 
 Run backend tests inside the container:
@@ -68,6 +79,7 @@ On PowerShell, replace `NUL` with `$null` if needed.
 ```text
 Technical-Assessment/
 |-- backend/        FastAPI, SQLAlchemy, Alembic, tests, and seed command
+|-- docs/           README screenshots captured from the running Docker stack
 |-- frontend/       Angular TypeScript application with the four required views
 |-- ARCHITECTURE.md One-page system overview
 |-- DECISIONS.md    ADR-style design choices and trade-offs
