@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, timezone
+from typing import Tuple
 from zoneinfo import ZoneInfo
 
 # Timezone utilities for pharmacy business rules.
@@ -16,7 +17,7 @@ def to_utc(value: datetime) -> datetime:
     return value.astimezone(UTC)
 
 
-def thirty_day_window_utc(end_utc: datetime) -> tuple[datetime, datetime]:
+def thirty_day_window_utc(end_utc: datetime) -> Tuple[datetime, datetime]:
     # Return the inclusive 30-day business window ending at end_utc.
     local_end = to_utc(end_utc).astimezone(JOHANNESBURG)
     local_start = local_end - timedelta(days=30)
