@@ -16,7 +16,7 @@ from app.database import get_session
 from app.errors import api_error
 from app.models import Dispense, FormularyRule, Medicine
 from app.repositories import dispense_to_api, get_medicine_by_code, get_rule_in_force, medicine_search_query
-from app.schemas import DispenseCreate, MedicineDetailResponse, MedicineListResponse, RuleCreate
+from app.schemas import DispenseCreate, MedicineDetailResponse, MedicineListResponse, RuleCreate, RuleListResponse, RuleOut
 from app.services import create_dispense_idempotently, introduce_rule
 from app.timezone import to_utc
 
@@ -53,7 +53,7 @@ def get_medicine(code: str, session: Session = Depends(get_session)) -> dict:
     return {"medicine": medicine, "current_rule": current_rule}
 
 
-@router.get("/medicines/{code}/rules")
+@router.get("/medicines/{code}/rules", response_model=RuleListResponse)
 def list_rules(code: str, session: Session = Depends(get_session)) -> dict:
     """Return the full rule history ordered as a timeline."""
     medicine = get_medicine_by_code(session, code)
@@ -65,7 +65,7 @@ def list_rules(code: str, session: Session = Depends(get_session)) -> dict:
     return {"data": rules}
 
 
-@router.post("/medicines/{code}/rules", status_code=201)
+@router.post("/medicines/{code}/rules", response_model=RuleOut, status_code=201)
 def create_rule(code: str, payload: RuleCreate, session: Session = Depends(get_session)):
     """Introduce a new rule period and supersede the period currently in force."""
     rule = introduce_rule(session, code, payload)

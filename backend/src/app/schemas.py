@@ -80,6 +80,12 @@ class MedicineDetailResponse(BaseModel):
     current_rule: RuleOut | None
 
 
+class RuleListResponse(BaseModel):
+    """Full historical rule timeline for a medicine."""
+
+    data: list[RuleOut]
+
+
 class RuleCreate(BaseModel):
     """Request body for introducing a new historical rule period."""
 

@@ -2,9 +2,11 @@
 
 from datetime import UTC, datetime
 
+from fastapi.testclient import TestClient
 from sqlalchemy import select
 
 from app.database import SessionLocal
+from app.main import app
 from app.models import FormularyRule
 from app.schemas import RuleCreate
 from app.services import introduce_rule
@@ -31,4 +33,17 @@ def test_introducing_rule_truncates_rule_in_force():
     assert rules[0].effective_to == start
     assert rules[1].effective_from == start
     assert rules[1].requires_authorisation is True
+
+
+def test_rule_history_endpoint_serializes_rules_with_cors_header():
+    """The Angular detail page depends on rule history being real JSON, not raw ORM objects."""
+    make_medicine_with_rule()
+
+    response = TestClient(app).get("/api/v1/medicines/TEST-001/rules", headers={"Origin": "http://localhost:4200"})
+
+    assert response.status_code == 200
+    assert response.headers["access-control-allow-origin"] == "http://localhost:4200"
+    body = response.json()
+    assert body["data"][0]["version_label"] == "test-test-001"
+    assert body["data"][0]["max_quantity_per_dispense"] == 20
 
