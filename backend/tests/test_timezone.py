@@ -5,7 +5,6 @@ stored in UTC, while business windows are calculated in Africa/Johannesburg.
 """
 
 from datetime import datetime, timezone
-from zoneinfo import ZoneInfo
 
 import pytest
 
@@ -35,5 +34,5 @@ def test_thirty_day_window_is_calculated_in_johannesburg_time():
     start_utc, end_utc = thirty_day_window_utc(end)
 
     assert end_utc == end
-    assert start_utc.astimezone(ZoneInfo("Africa/Johannesburg")) == datetime(2025, 1, 2, 0, 30, 0, tzinfo=JOHANNESBURG)
+    assert start_utc.astimezone(JOHANNESBURG) == datetime(2025, 1, 2, 0, 30, 0, tzinfo=JOHANNESBURG)
 
