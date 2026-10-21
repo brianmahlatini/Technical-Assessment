@@ -53,6 +53,14 @@ main {
   padding: 20px;
 }
 
+/* Page heading keeps title/details on the left and page-level action on the right. */
+.page-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
 /* Forms use CSS grid so they stay tidy on desktop and collapse on smaller widths. */
 .toolbar,
 .grid-form {
@@ -71,11 +79,27 @@ main {
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
+/* Rule form gets a little breathing room between the current rule and timeline. */
+.rule-form {
+  margin-top: 16px;
+}
+
 /* Labels stack text above inputs, which is easier to scan in form-heavy screens. */
 label {
   display: grid;
   gap: 6px;
   font-weight: 700;
+}
+
+/* Checkbox labels align the checkbox and text in one row. */
+.checkbox-label {
+  align-content: center;
+  grid-template-columns: auto 1fr;
+  justify-content: start;
+}
+
+.checkbox-label input {
+  min-height: auto;
 }
 
 /* Inputs and buttons share sizing so form rows align cleanly. */

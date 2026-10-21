@@ -10,7 +10,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 
-import { Dispense, DispenseFormPayload, Medicine, PageMeta, Rule } from './api.models';
+import { Dispense, DispenseFormPayload, Medicine, PageMeta, Rule, RuleCreatePayload } from './api.models';
 
 const API_BASE_URL = 'http://localhost:8000/api/v1';
 
@@ -33,6 +33,11 @@ export class ApiClient {
   getRules(code: string) {
     // Rule history powers the timeline shown on the medicine detail page.
     return this.http.get<{ data: Rule[] }>(`${API_BASE_URL}/medicines/${code}/rules`);
+  }
+
+  createRule(code: string, payload: RuleCreatePayload) {
+    // Rule creation closes the currently active period and adds a new version.
+    return this.http.post<Rule>(`${API_BASE_URL}/medicines/${code}/rules`, payload);
   }
 
   createDispense(payload: DispenseFormPayload) {

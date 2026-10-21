@@ -35,6 +35,14 @@ export interface Rule {
   version_label: string;
 }
 
+// The medicine detail form sends this payload to POST /medicines/{code}/rules.
+export interface RuleCreatePayload {
+  effective_from: string;
+  max_quantity_per_dispense: number;
+  max_quantity_per_30_days: number;
+  requires_authorisation: boolean;
+}
+
 // Dispense rows are returned for accepted submissions and patient ledger items.
 export interface Dispense {
   id: number;
